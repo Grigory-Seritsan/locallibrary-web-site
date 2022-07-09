@@ -1,6 +1,8 @@
 from django.db import models
+from django.contrib import admin
 from django.urls import reverse #Used to generate URLs by reversing the URL patterns
 import uuid
+
 
 # Create your models here.
 class Genre(models.Model):
@@ -16,6 +18,7 @@ class Genre(models.Model):
         """
         return self.name
 
+    
 
 
 class Book(models.Model):
@@ -45,6 +48,11 @@ class Book(models.Model):
         Returns the url to access a particular book instance.
         """
         return reverse('book-detail', args=[str(self.id)])
+
+    def display_genre(self):
+        return ', '.join([ genre.name for genre in self.genre.all()[:3] ])
+
+    display_genre.short_discription ='Genre'
 
 class BookInstance(models.Model):
     """
@@ -104,3 +112,41 @@ class Language(models.Model):
     def __str__(self):
         """String for representing the Model object (in Admin site etc.)"""
         return self.name
+        
+class BookInline(admin.TabularInline):
+    model = Book
+    extra = 0
+
+class AuthorAdmin(admin.ModelAdmin):
+    list_display = ('last_name', 'first_name', 'date_of_birth','date_of_death')
+    fieldsets = (
+        (None, {
+        'fields': ('first_name','last_name')}),
+        ('Date', {
+        'fields': ('date_of_birth','date_of_death')})
+    )
+    inlines = [BookInline]
+    
+class BooksInstanceInline(admin.TabularInline):
+    model = BookInstance
+    extra = 0
+   
+
+@admin.register(Book)
+class BookAdmin (admin.ModelAdmin):
+    list_display = ('title', 'author','display_genre')
+    inlines = [BooksInstanceInline]
+
+@admin.register(BookInstance)
+class BookInstanceAdmin(admin.ModelAdmin):
+    list_display = ('book', 'status', 'due_back', 'id')
+    list_filter = ('status', 'due_back')
+    fieldsets = (
+        (None, {
+            'fields':('id', 'book', 'imprint')
+        }),
+        ('Availability', {
+            'fields':('status','due_back')
+        })
+    )
+
