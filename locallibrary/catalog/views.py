@@ -1,8 +1,9 @@
 from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 from .models import Book, Author, BookInstance, Genre
-
+@login_required
 def index(request):
     """
     Функция отображения для домашней страницы сайта.
