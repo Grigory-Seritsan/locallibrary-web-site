@@ -125,3 +125,19 @@ class AuthorDelete(PermissionRequiredMixin,DeleteView):
     permission_required = 'can_edit_authors'
     model = Author
     success_url = reverse_lazy('authors')
+
+class BookCreate(PermissionRequiredMixin,CreateView):
+    permission_required = 'can_add_book'
+    model = Book
+    fields = '__all__'
+    
+
+class BookUpdate(PermissionRequiredMixin,UpdateView):
+    permission_required = 'can_change_book'
+    model = Book
+    fields = '__all__'
+
+class BookDelete(PermissionRequiredMixin,DeleteView):
+    permission_required = 'can_delete_book'
+    model = Book
+    success_url = reverse_lazy('books')
