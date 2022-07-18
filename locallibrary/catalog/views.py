@@ -97,7 +97,7 @@ def renew_book_librarian(request, pk):
             book_inst.save()
 
             # redirect to a new URL:
-            return HttpResponseRedirect(reverse('all-borrowed') )
+            return HttpResponseRedirect(reverse('books-borrowed') )
 
     # If this is a GET (or any other method) create the default form.
     else:
