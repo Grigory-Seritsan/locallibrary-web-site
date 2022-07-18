@@ -99,6 +99,9 @@ class Author(models.Model):
     date_of_birth = models.DateField(null=True, blank=True)
     date_of_death = models.DateField('Died', null=True, blank=True)
 
+    class Meta:
+        permissions = (('can_edit_authors','Can edit authors'), )
+
     def get_absolute_url(self):
         """
         Returns the url to access a particular author instance.
